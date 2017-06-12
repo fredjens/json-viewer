@@ -1,0 +1,28 @@
+*, html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: monospace;
+  font-size: 16px;
+  padding: 2rem;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.search {
+  font-family: monospace;
+  font-weight: 200;
+  display: block;
+  font-size: 1.25rem;
+  width: 100%;
+  padding: .5rem .75rem;
+  background: #eee;
+  border: 0;
+  outline: 2px solid #eee;
+}
+
+.search:focus {
+  transition: all 120ms;
+  outline: 6px solid #eee;
+}
