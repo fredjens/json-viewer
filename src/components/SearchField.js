@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import autoBind from 'auto-bind';
+import autoBind from 'react-autobind';
 
 export default class SearchField extends Component {
   constructor(props) {

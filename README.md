@@ -1,6 +1,6 @@
 # 🔍 JSON viewer
 
-View and search in JSON data 👉 [https://json-viewer.herokuapp.com/](JSON viewer)
+View and search in JSON data 👉 [http://json-viewer.surge.sh/](JSON viewer)
 
 🌿 Objects
 👪 Arrays

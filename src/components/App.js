@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import autoBind from 'auto-bind';
+import autoBind from 'react-autobind';
 import { isEmpty } from 'lodash';
 
 // import json from '../test-json/test-1.json';
