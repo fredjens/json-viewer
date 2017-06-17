@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import autoBind from 'auto-bind';
+import { isEmpty } from 'lodash';
 
 // import json from '../test-json/test-1.json';
 import { checkIfInSearch } from '../utils/check-if-in-search';
@@ -41,12 +42,12 @@ class App extends Component {
 
     if (error) {
       return this.setState({
-        errorMessage: json.error,
+        errorMessage: error,
         loading: false,
       });
     }
 
-    this.setState({ json: json.data, loading: false });
+    this.setState({ json: data, loading: false });
   }
 
 
@@ -86,24 +87,26 @@ class App extends Component {
     const { searchString, toggleIndex } = this.state;
 
     const childrenNodes = ({ json = {}, name = '', index }) => {
-      if (json === null) {
+      if (json === true) {
         return (
           <li key={index}>
-            {checkIfInSearch(name, searchString)}: <strong>null 🅾️</strong>
+            {checkIfInSearch(name, searchString)}: <strong>true ✅</strong>
           </li>
         );
       }
 
-      if (typeof json === 'object') {
+      if (json === false) {
         return (
           <li key={index}>
-            <button onClick={() => this.handleToggle(name)}>
-              <ExpandIcon expanded={toggleIndex.includes(name)} />
-              {checkIfInSearch(name, searchString)}: {json instanceof Array ? '👪' : '🌿'}
-            </button>
-            <ul style={{
-              display: toggleIndex.includes(name) ? 'block' : 'none'
-            }}>{this.renderJSON(json)}</ul>
+            {checkIfInSearch(name, searchString)}: <strong>false ❌</strong>
+          </li>
+        );
+      }
+
+      if (json === null) {
+        return (
+          <li key={index}>
+            {checkIfInSearch(name, searchString)}: <strong>null 🅾️</strong>
           </li>
         );
       }
@@ -120,6 +123,20 @@ class App extends Component {
         return (
           <li key={index}>
             {checkIfInSearch(name, searchString)}: <strong>{checkIfInSearch(json, searchString)}</strong> 🔢
+          </li>
+        );
+      }
+
+      if (typeof json === 'object') {
+        return (
+          <li key={index}>
+            <button onClick={() => this.handleToggle(name)}>
+              {!isEmpty(json) && <ExpandIcon expanded={toggleIndex.includes(name)} />}
+              {checkIfInSearch(name, searchString)}: {json instanceof Array ? '👪' : '🌿'}
+            </button>
+            <ul style={{
+              display: toggleIndex.includes(name) ? 'block' : 'none'
+            }}>{this.renderJSON(json)}</ul>
           </li>
         );
       }

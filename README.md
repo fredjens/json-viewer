@@ -7,6 +7,8 @@ View and search in JSON data.
 🔢 Strings
 🆎 Numbers
 🅾️ Null
+✅ True
+❌ False
 
 Built with [React](https://facebook.github.io/react/).
 
