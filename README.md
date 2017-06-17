@@ -6,7 +6,9 @@ View and search in JSON data.
 👪 Arrays
 🔢 Strings
 🆎 Numbers
+🅾️ Null
 
 Built with [React](https://facebook.github.io/react/).
 
 __This is work in progress__
+

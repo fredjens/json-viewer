@@ -1,36 +1,109 @@
 import React, { Component } from 'react';
 import autoBind from 'auto-bind';
 
-import json from '../test-json/test-1.json';
+// import json from '../test-json/test-1.json';
 import { checkIfInSearch } from '../utils/check-if-in-search';
+import { fetchJSONfromUrl } from '../services/fetch-json-from-url';
+
+import SearchField from './SearchField';
+import ExpandIcon from './ExpandIcon';
 
 class App extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
-    this.state = { search: '', toggle: false };
+    this.state = {
+      searchString: '',
+      url: '',
+      toggleIndex: [],
+      errorMessage: '',
+      json: null,
+    };
   }
 
-  static defaultProps = { json };
+  // static defaultProps = { json };
 
-  handleToggle() {
-    this.setState({ toggle: !this.state.toggle });
+  async fetchData() {
+    const { url } = this.state;
+
+    if (url === '') {
+      return this.setState({ errorMessage: '' });
+    }
+
+    this.setState({
+      loading: true,
+      errorMessage: '',
+    });
+
+    const json = await fetchJSONfromUrl(url);
+
+    const { error = '', data = {} } = json;
+
+    if (error) {
+      return this.setState({
+        errorMessage: json.error,
+        loading: false,
+      });
+    }
+
+    this.setState({ json: json.data, loading: false });
+  }
+
+
+  async handleJSONurl(e) {
+    e.preventDefault();
+    this.fetchData();
+  }
+
+  updateFormField(e) {
+    this.setState({
+      url: e.target.value,
+      errorMessage: '',
+    });
+  }
+
+  handleToggle(name) {
+    if (this.state.toggleIndex.includes(name)) {
+      const newToggleIndex = this.state.toggleIndex
+      .filter(index => index !== name);
+
+      return this.setState({
+        ...this.state,
+        toggleIndex: newToggleIndex,
+      });
+    }
+
+    this.setState({
+      ...this.state,
+      toggleIndex: [
+        ...this.state.toggleIndex,
+        name,
+      ],
+    });
   };
 
-  handleSearchInput(e) {
-    const { value } = e.target;
-    this.setState({ search: value });
-  }
-
   renderJSON(data) {
-    const { search, toggle } = this.state;
+    const { searchString, toggleIndex } = this.state;
 
     const childrenNodes = ({ json = {}, name = '', index }) => {
+      if (json === null) {
+        return (
+          <li key={index}>
+            {checkIfInSearch(name, searchString)}: <strong>null 🅾️</strong>
+          </li>
+        );
+      }
+
       if (typeof json === 'object') {
         return (
-          <li key={index} onClick={this.handleToggle} style={{ cursor: 'pointer' }}>
-            {checkIfInSearch(name, search)}: {json instanceof Array ? '👪' : '🌿'}
-            <ul style={{ display: toggle ? 'none' : 'block' }}>{this.renderJSON(json)}</ul>
+          <li key={index}>
+            <button onClick={() => this.handleToggle(name)}>
+              <ExpandIcon expanded={toggleIndex.includes(name)} />
+              {checkIfInSearch(name, searchString)}: {json instanceof Array ? '👪' : '🌿'}
+            </button>
+            <ul style={{
+              display: toggleIndex.includes(name) ? 'block' : 'none'
+            }}>{this.renderJSON(json)}</ul>
           </li>
         );
       }
@@ -38,7 +111,7 @@ class App extends Component {
       if (typeof json === 'string') {
         return (
           <li key={index}>
-            {checkIfInSearch(name, search)}: <strong>{checkIfInSearch(json, search)}</strong> 🆎
+            {checkIfInSearch(name, searchString)}: <strong>{checkIfInSearch(json, searchString)}</strong> 🆎
           </li>
         );
       }
@@ -46,7 +119,7 @@ class App extends Component {
       if (typeof json === 'number') {
         return (
           <li key={index}>
-            {checkIfInSearch(name, search)}: <strong>{checkIfInSearch(json, search)}</strong> 🔢
+            {checkIfInSearch(name, searchString)}: <strong>{checkIfInSearch(json, searchString)}</strong> 🔢
           </li>
         );
       }
@@ -58,21 +131,37 @@ class App extends Component {
   }
 
   render() {
-    const { json = {} } = this.props;
-    const { search } = this.state;
+    const { json, loading, errorMessage } = this.state;
 
     return (
       <div>
-        <input
-          type="text"
-          className="search"
-          placeholder="Search..."
-          value={search}
-          onChange={this.handleSearchInput}
-        />
+        <form onSubmit={this.handleJSONurl}>
+          <input
+            type="text"
+            placeholder="JSON url"
+            className="search"
+            onChange={this.updateFormField}
+          />
+        </form>
+        {json &&
+          <div style={{ marginTop: '20px' }}>
+            <SearchField
+              onChange={val => this.setState({ searchString: val })}
+            />
+            <button
+              onClick={this.fetchData}
+              style={{
+                float: 'right',
+              }}
+            >Refetch</button>
+          </div>
+        }
         <ul>
-          {this.renderJSON(json)}
+          {json && !loading && this.renderJSON(json)}
         </ul>
+        {!json && !errorMessage && !loading && '👆 Gimme som JSON'}
+        {errorMessage && (<div>{`😞 ${errorMessage}`}</div>)}
+        {loading && 'Loading JSON 😄'}
       </div>
     );
   }
