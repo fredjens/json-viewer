@@ -1,6 +1,6 @@
 # 🔍 JSON viewer
 
-View and search in JSON data.
+View and search in JSON data 👉 [https://json-viewer.herokuapp.com/](JSON viewer)
 
 🌿 Objects
 👪 Arrays
@@ -12,5 +12,4 @@ View and search in JSON data.
 
 Built with [React](https://facebook.github.io/react/).
 
-__This is work in progress__
 
