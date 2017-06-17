@@ -6,12 +6,13 @@
     "auto-bind": "^1.1.0",
     "lodash": "^4.17.4",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
     "react-scripts": "1.0.7"
   },
   "scripts": {
-    "postinstall": "yarn build",
-    "dev": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
