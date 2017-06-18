@@ -1,6 +1,6 @@
 # 🔍 JSON viewer 🌿
 
-### View and search JSON data 👉 [JSON viewer](http://json-viewer.surge.sh/)
+### View and search JSON data 👉 [JSON viewer](https://json-viewer.surge.sh/)
 
 _This is work in progress_
 
