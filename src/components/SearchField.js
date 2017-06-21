@@ -22,29 +22,58 @@ export default class SearchField extends Component {
   }
 
   toggleSearch() {
-    this.setState({ searchActive: !this.state.searchActive });
+    const { onChange } = this.props;
+    const { searchActive } = this.state;
+
+    if (searchActive) {
+      this.setState({
+        searchActive: false,
+        searchInput: '',
+      });
+
+      return onChange('');
+    };
+
+    this.setState({
+      searchActive: true,
+    }, () => this.searchInput.focus());
   }
 
   render() {
     const { searchInput, searchActive } = this.state;
 
+    const fixed = {
+      position: 'fixed',
+      right: '0',
+      top: '50%',
+      transform: 'translateX(-50%)',
+      boxShadow: '2px 2px 1px #444',
+    };
+
     const searchField = (
-      <input
-        type="text"
-        className="search"
-        placeholder="Search..."
-        value={searchInput}
-        onChange={this.handleSearchInput}
-      />
+      <div style={searchInput.length === 0 ? fixed : {}}>
+        <input
+          type="text"
+          className="search"
+          placeholder="Search..."
+          value={searchInput}
+          onChange={this.handleSearchInput}
+          ref={ref => { this.searchInput = ref; }}
+        />
+      </div>
     );
 
     return (
       <div>
         {searchActive && searchField}
-        <button onClick={this.toggleSearch} style={{
-          float: 'right',
-        }}>
-          {searchActive ? 'Close search' : 'Search JSON'}
+        <button
+          className="btn"
+          onClick={this.toggleSearch}
+          style={{
+            float: 'right',
+          }}
+        >
+          {searchActive ? 'Close search' : 'Search'}
         </button>
       </div>
     );

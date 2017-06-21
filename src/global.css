@@ -3,23 +3,26 @@
 }
 
 body {
-  font-family: monospace;
+  font-family: 'Source Code Pro', monospace;
   font-size: 16px;
-  padding: 2rem;
   margin: 0;
   box-sizing: border-box;
+  box-sizing: border-box;
+  min-height: 100%;
 }
 
 .search {
-  font-family: monospace;
+  font-family: 'Source Code Pro', monospace;
   font-weight: 200;
   display: block;
   font-size: 1.25rem;
   width: 100%;
+  display: block;
   padding: .5rem .75rem;
   background: #eee;
   border: 0;
   outline: 2px solid #eee;
+  transition: all 120ms;
 }
 
 .search:focus {
@@ -29,7 +32,7 @@ body {
 
 button {
   cursor: pointer;
-  font-family: monospace;
+  font-family: 'Source Code Pro', monospace;
   background: none;
   border: 0;
   font-size: 1rem;
@@ -39,11 +42,20 @@ button:focus {
   outline: none;
 }
 
+.btn {
+  background: blue;
+  color: white;
+  padding: .5rem 1rem;
+  margin-left: .5rem;
+  font-size: .8rem;
+}
+
 ul {
   list-style: none;
   padding-left: 0;
   border-left: 1px dotted #ccc;
   margin-bottom: 1.5rem;
+  margin-top: 0;
 }
 
 ul li {
@@ -56,4 +68,29 @@ ul li {
   color: #ccc;
   margin-left: -.6rem;
   margin-right: .5rem;
+}
+
+.highlight {
+  background: yellow;
+}
+
+h1 {
+  margin-top: 0;
+  transition: all 100ms;
+  font-weight: 200;
+}
+
+.def {
+  display: inline-block;
+  width: 180px;
+  position: absolute;
+  margin-top: 2px;
+  font-size: .9rem;
+}
+
+.val {
+  display: inline-block;
+  padding-left: 180px;
+  margin-top: 5px;
+  font-size: .9rem;
 }

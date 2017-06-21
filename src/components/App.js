@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
 import { isEmpty } from 'lodash';
+import Highlight from 'react-highlighter';
 
-// import json from '../test-json/test-1.json';
-import { checkIfInSearch } from '../utils/check-if-in-search';
 import { fetchJSONfromUrl } from '../services/fetch-json-from-url';
 
 import SearchField from './SearchField';
 import ExpandIcon from './ExpandIcon';
+
+// const url = 'https://api.nasa.gov/planetary/apod?api_key=NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo';
 
 class App extends Component {
   constructor(props) {
@@ -90,7 +91,10 @@ class App extends Component {
       if (json === true) {
         return (
           <li key={index}>
-            {checkIfInSearch(name, searchString)}: <strong>true ✅</strong>
+            <span className="def">
+              ✅ <Highlight search={searchString}>{name}</Highlight>
+            </span>
+            <span className="val">true</span>
           </li>
         );
       }
@@ -98,7 +102,10 @@ class App extends Component {
       if (json === false) {
         return (
           <li key={index}>
-            {checkIfInSearch(name, searchString)}: <strong>false ❌</strong>
+            <span className="def">
+              ❌ <Highlight search={searchString}>{name}</Highlight>
+            </span>
+            <span className="val">false</span>
           </li>
         );
       }
@@ -106,7 +113,10 @@ class App extends Component {
       if (json === null) {
         return (
           <li key={index}>
-            {checkIfInSearch(name, searchString)}: <strong>null 🅾️</strong>
+            <span className="def">
+              🅾️ <Highlight search={searchString}>{name}</Highlight>
+            </span>
+            <span className="val">null</span>
           </li>
         );
       }
@@ -114,7 +124,10 @@ class App extends Component {
       if (typeof json === 'string') {
         return (
           <li key={index}>
-            {checkIfInSearch(name, searchString)}: <strong>{checkIfInSearch(json, searchString)}</strong> 🆎
+            <span className="def">
+              🆎 <Highlight search={searchString}>{name}</Highlight>
+            </span>
+            <span className="val"><Highlight search={searchString}>{json}</Highlight></span>
           </li>
         );
       }
@@ -122,7 +135,10 @@ class App extends Component {
       if (typeof json === 'number') {
         return (
           <li key={index}>
-            {checkIfInSearch(name, searchString)}: <strong>{checkIfInSearch(json, searchString)}</strong> 🔢
+            <span className="def">
+              🔢 <Highlight search={searchString}>{name}</Highlight>
+            </span>
+            <span className="val"><Highlight search={searchString}>{json}</Highlight></span>
           </li>
         );
       }
@@ -132,7 +148,8 @@ class App extends Component {
           <li key={index}>
             <button onClick={() => this.handleToggle(name)}>
               {!isEmpty(json) && <ExpandIcon expanded={toggleIndex.includes(name)} />}
-              {checkIfInSearch(name, searchString)}: {json instanceof Array ? '👪' : '🌿'}
+              {json instanceof Array ? '👪 ' : '🌿 '}
+              <Highlight search={searchString}>{name}</Highlight>
             </button>
             <ul style={{
               display: toggleIndex.includes(name) ? 'block' : 'none'
@@ -148,37 +165,75 @@ class App extends Component {
   }
 
   render() {
-    const { json, loading, errorMessage } = this.state;
+    const { json, loading, errorMessage, url, searchString } = this.state;
 
     return (
-      <div>
-        <form onSubmit={this.handleJSONurl}>
-          <input
-            type="text"
-            placeholder="JSON url"
-            className="search"
-            onChange={this.updateFormField}
-          />
-        </form>
-        {json &&
-          <div style={{ marginTop: '20px' }}>
-            <SearchField
-              onChange={val => this.setState({ searchString: val })}
-            />
-            <button
-              onClick={this.fetchData}
-              style={{
-                float: 'right',
-              }}
-            >Refetch</button>
-          </div>
-        }
-        <ul>
-          {json && !loading && this.renderJSON(json)}
-        </ul>
-        {!json && !errorMessage && !loading && '👆 Gimme som JSON'}
-        {errorMessage && (<div>{`😞 ${errorMessage}`}</div>)}
-        {loading && 'Loading JSON 😄'}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        padding: '2rem',
+      }}>
+        <div style={{
+          width: '100%',
+        }}>
+          <h1 style={{
+            fontSize: json ? '1rem' : '2rem',
+          }}>JSON data viewer</h1>
+          {searchString.length <= 0 &&
+            <form onSubmit={this.handleJSONurl} style={{ marginBottom: '.5rem'}}>
+              <input
+                type="text"
+                placeholder="👉 Gimme some JSON"
+                className="search"
+                onChange={this.updateFormField}
+                value={url}
+              />
+            </form>
+          }
+          {json &&
+            <div style={{ marginTop: '20px' }}>
+              <SearchField
+                onChange={val => this.setState({ searchString: val })}
+              />
+            </div>
+          }
+          <button
+            className="btn"
+            onClick={this.fetchData}
+            style={{
+              float: 'right',
+            }}
+          >
+            {json ? 'Refetch' : 'Fetch'}
+          </button>
+          <Highlight search={searchString}>
+            <ul>
+              {json && !loading && this.renderJSON(json)}
+            </ul>
+          </Highlight>
+          {errorMessage && (<div>{`😞 ${errorMessage}`}</div>)}
+          {loading && 'Loading... 😄'}
+          {!json && (
+            <div style={{
+              marginTop: '4rem',
+              display: 'block',
+              fontSize: '.8rem',
+            }}>
+              <h3>Data types:</h3>
+              🌿 Objects<br />
+              👪 Arrays<br />
+              🔢 Strings<br />
+              🆎 Numbers<br />
+              🅾️ Null<br />
+              ✅ True<br />
+              ❌ False
+            </div>
+          )}
+        </div>
+
       </div>
     );
   }
