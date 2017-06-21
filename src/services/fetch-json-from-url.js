@@ -1,7 +1,8 @@
+import axios from 'axios';
+
 export function fetchJSONfromUrl(url) {
-  return fetch(url)
-  .then(res => res.json())
-  .then(json => ({ data: json }))
+  return axios.get(url)
+  .then(json => ({ data: json.data }))
   .catch(error => ({
     error: error
   }));
