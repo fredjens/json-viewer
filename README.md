@@ -1,8 +1,6 @@
-# 🔍 JSON viewer 🌿
+# 🔍 JSON viewer
 
-### View and search JSON data 👉 [JSON viewer](http://json-viewer.surge.sh/)
-
-_This is work in progress_
+### Fetch, view and search JSON 👉 [JSON viewer](http://json-viewer.surge.sh/)
 
 __Dictionary:__
 
@@ -20,6 +18,4 @@ __Dictionary:__
 
 ❌ False
 
-Built with [React](https://facebook.github.io/react/) <3.
-
-
+Built with [React](https://facebook.github.io/react/) <3
