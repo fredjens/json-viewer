@@ -1,6 +1,6 @@
 # 🔍 JSON viewer
 
-### Fetch, view and search JSON 👉 [JSON viewer](http://json-viewer.surge.sh/)
+### Fetch, view and search JSON data 👉 [JSON viewer](https://json-viewer.surge.sh/)
 
 __Dictionary:__
 
